@@ -1,0 +1,6 @@
+.vs/
+Debug/
+test.c
+*.txt
+*vcxproj*
+*.sln
