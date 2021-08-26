@@ -218,6 +218,12 @@ double over_determinant(Matrix *mat);
 //
 Matrix* inverse_matrix(Matrix *mat);
 
+// Evaluates a polynomial for a given 'x' value.
+// The array must have the coefficients of the polynomial ordered by degree.
+// Returns '0' if 'coef' is NULL.
+//
+double polynomial_function(double x, Array *coef);
+
 
 //
 // Functions for systems of equations:

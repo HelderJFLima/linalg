@@ -1218,6 +1218,32 @@ Matrix* inverse_matrix(Matrix *mat)             // Returns the inverse of a matr
     return inv;
 }
 
+double polynomial_function(double x, Array *coef)   // Evaluates a polynomial for a given 'x' value.
+{
+    register int i;
+    double fx;
+
+    if (coef == NULL)
+    {
+        printf("\n\n** Error: NULL array informed for the function! **\n\a");
+
+        return 0;
+    }
+
+    if (coef->len == 1)
+        return coef->a[0];
+                                                                // Horner's method for polynomials
+    fx = coef->a[coef->len - 1] * x + coef->a[coef->len - 2];
+
+    if (coef->len > 2)                                              // If the polynomial's degree is higher than 1
+    {
+        for (i = coef->len - 2; i >= 1; i--)
+            fx = fx * x + coef->a[i - 1];
+    }
+
+    return fx;
+}
+
 // Functions for systems of equations:
 
 Matrix* get_system(char *name)          // Get an augmented matrix of a system of equations from a 'txt' file.
