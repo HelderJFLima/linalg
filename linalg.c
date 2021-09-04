@@ -68,6 +68,50 @@ void free_array(Array *arr)         // Deallocates memory previously used for an
     }
 }
 
+int length_of_array(Array *arr)     // Gives the length of an array.
+{
+    if (arr == NULL)
+        return 0;
+    else
+        return arr->len;
+}
+
+void insert_in_array(double a, Array *arr, int pos)     // Inserts a value in an array in a given position.
+{
+    if (arr == NULL)
+    {
+        printf("\n\n** Error: NULL array informed! **\n\a");
+
+        return;
+    }
+    else if (pos < 0 || pos >= arr->len)
+    {
+        printf("\n\n** Error: inexistent position in the array! **\n\a");
+
+        return;
+    }
+
+    arr->a[pos] = a;
+}
+
+double get_from_array(Array *arr, int pos)      // Gets a value in an array from a given position.
+{
+    if (arr == NULL)
+    {
+        printf("\n\n** Error: NULL array informed! **\n\a");
+
+        return 0;
+    }
+    else if (pos < 0 || pos >= arr->len)
+    {
+        printf("\n\n** Error: inexistent position in the array! **\n\a");
+
+        return 0;
+    }
+
+    return arr->a[pos];
+}
+
 Array* get_array(char *name)        // Get an array from a 'txt' file.
 {
     register int i;
@@ -208,6 +252,58 @@ void free_matrix(Matrix *mat)       // Deallocates memory previously used for a 
 
         free(mat);
     }
+}
+
+int matrix_row_number(Matrix *mat)      // Gives the number of rows of a matrix.
+{
+    if (mat == NULL)
+        return 0;
+    else
+        return mat->row;
+}
+
+int matrix_column_number(Matrix *mat)   // Gives the number of columns of a matrix.
+{
+    if (mat == NULL)
+        return 0;
+    else
+        return mat->col;
+}
+
+void insert_in_matrix(double a, Matrix *mat, int i, int j)      // Inserts a value in a matrix in a given position.
+{
+    if (mat == NULL)
+    {
+        printf("\n\n** Error: NULL matrix informed! **\n\a");
+
+        return;
+    }
+    else if (i < 0 || i >= mat->row || j < 0 || j >= mat->col)
+    {
+        printf("\n\n** Error: inexistent position in the matrix! **\n\a");
+
+        return;
+    }
+
+    mat->m[i][j] = a;
+}
+
+double get_from_matrix(Matrix *mat, int i, int j)           // Gets a value in a matrix from a given position.
+{
+    if (mat == NULL)
+    {
+        printf("\n\n** Error: NULL matrix informed! **\n\a");
+
+        return 0;
+    }
+    else if (i < 0 || i >= mat->row || j < 0 || j >= mat->col)
+    {
+        printf("\n\n** Error: inexistent position in the matrix! **\n\a");
+
+        return 0;
+    }
+
+    return mat->m[i][j];
 }
 
 Matrix* get_matrix(char *name)      // Get a matrix from a 'txt' file.

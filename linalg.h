@@ -25,6 +25,21 @@ Array* create_array(int len);
 //
 void free_array(Array *arr);
 
+// Gives the length of an array.
+// A NULL array returns '0'.
+//
+int length_of_array(Array *arr);
+
+// Inserts a value in an array in a given position.
+//
+void insert_in_array(double a, Array *arr, int pos);
+
+// Gets a value in an array from a given position.
+// If the position does not exist or the array is
+// NULL, the function returns '0'.
+//
+double get_from_array(Array *arr, int pos);
+
 // Get an array from a 'txt' file.
 //
 Array* get_array(char *name);
@@ -46,6 +61,26 @@ Matrix* create_identity_matrix(int ord);
 // Deallocates memory previously used for a matrix.
 //
 void free_matrix(Matrix *mat);
+
+// Gives the number of rows of a matrix.
+// A NULL matrix returns '0'.
+//
+int matrix_row_number(Matrix *mat);
+
+// Gives the number of columns of a matrix.
+// A NULL matrix returns '0'.
+//
+int matrix_column_number(Matrix *mat);
+
+// Inserts a value in a matrix in a given position.
+//
+void insert_in_matrix(double a, Matrix *mat, int i, int j);
+
+// Gets a value in a matrix from a given position.
+// If the position does not exist or the matrix is
+// NULL, the function returns '0'.
+//
+double get_from_matrix(Matrix *mat, int i, int j);
 
 // Get a matrix from a 'txt' file.
 //
