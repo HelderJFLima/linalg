@@ -90,6 +90,10 @@ Matrix* get_matrix(char *name);
 //
 void print_matrix(Matrix *mat);
 
+// Shows an error message indicating the function from where it came.
+//
+static void error_message_la(int nmbr, char *mssg);
+
 
 //
 // Copy functions:
@@ -226,6 +230,29 @@ void over_transpose_matrix(Matrix *mat);
 // Other operations:
 //
 
+
+// Calculates the scalar product of two vectors (arrays).
+// Returns '0' if one or both arrays are NULL
+// or if their dimensions are incompatible.
+//
+double scalar_product(Array *a, Array *b);
+
+// Calculates the vector product of two vectors (arrays).
+// Returns NULL if one or both arrays are NULL
+// or if their dimensions are incompatible.
+//
+Array* vector_product(Array *a, Array *b);
+
+// Calculates the euclidean norm of a vector (array).
+// Returns '0' if 'arr' is NULL.
+//
+double euclidean_norm(Array *arr);
+
+// Determines the cosine of the angle between two vectors (arrays).
+// Returns '100' if one or both arrays are NULL
+// or have a zero length.
+//
+double cosine_similarity(Array *a, Array *b);
 
 // Changes two rows of a matrix.
 //

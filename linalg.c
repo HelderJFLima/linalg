@@ -4,7 +4,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "linalg.h"
+
+#define ERRMSS01 "memory allocation error!"
+#define ERRMSS02 "NULL array informed!"
+#define ERRMSS03 "error opening file!"
+#define ERRMSS04 "NULL matrix informed!"
+#define ERRMSS05 "incompatible dimensions for overwriting!"
+// Last function number: 46
 
 struct array
 {
@@ -30,7 +38,7 @@ Array* create_array(int len)        // Creates an array with a given length.
 
     if (len <= 0)
     {
-        printf("\n\n** Error: incompatible dimension for an array! **\n\a");
+        error_message_la(1, "incompatible dimension for an array!");
 
         return NULL;
     }
@@ -39,7 +47,7 @@ Array* create_array(int len)        // Creates an array with a given length.
 
     if (ar == NULL)
     {
-        printf("\n\n** Memory allocation error! **\n\a");
+        error_message_la(1, ERRMSS01);
 
         exit(1);
     }
@@ -48,9 +56,9 @@ Array* create_array(int len)        // Creates an array with a given length.
 
     if (ar->a == NULL)
     {
-        printf("\n\n** Memory allocation error! **\n\a");
+        error_message_la(1, ERRMSS01);
 
-        exit(2);
+        exit(1);
     }
 
     ar->len = len;
@@ -80,13 +88,13 @@ void insert_in_array(double a, Array *arr, int pos)     // Inserts a value in an
 {
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed! **\n\a");
+        error_message_la(2, ERRMSS02);
 
         return;
     }
     else if (pos < 0 || pos >= arr->len)
     {
-        printf("\n\n** Error: inexistent position in the array! **\n\a");
+        error_message_la(2, "inexistent position in the array!");
 
         return;
     }
@@ -98,13 +106,13 @@ double get_from_array(Array *arr, int pos)      // Gets a value in an array from
 {
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed! **\n\a");
+        error_message_la(3, ERRMSS02);
 
         return 0;
     }
     else if (pos < 0 || pos >= arr->len)
     {
-        printf("\n\n** Error: inexistent position in the array! **\n\a");
+        error_message_la(3, "inexistent position in the array!");
 
         return 0;
     }
@@ -124,9 +132,9 @@ Array* get_array(char *name)        // Get an array from a 'txt' file.
 
     if (filin == NULL)
     {
-        printf("\n\n** Error opening file! **\n\a");
+        error_message_la(4, ERRMSS03);
 
-        exit(3);
+        exit(4);
     }
 
     fscanf(filin, "%d", &len);
@@ -168,7 +176,7 @@ Matrix* create_matrix(int m, int n)         // Creates a matrix with given dimen
 
     if (m <= 0 || n <= 0)
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix! **\n\a");
+        error_message_la(5, "incompatible dimensions for a matrix!");
 
         return NULL;
     }
@@ -177,9 +185,9 @@ Matrix* create_matrix(int m, int n)         // Creates a matrix with given dimen
 
     if (mat == NULL)
     {
-        printf("\n\n** Memory allocation error! **\n\a");
+        error_message_la(5, ERRMSS01);
 
-        exit(4);
+        exit(5);
     }
 
     mat->row = m;
@@ -190,7 +198,7 @@ Matrix* create_matrix(int m, int n)         // Creates a matrix with given dimen
 
     if (mat->m == NULL)
     {
-        printf("\n\n** Memory allocation error! **\n\a");
+        error_message_la(5, ERRMSS01);
 
         exit(5);
     }
@@ -201,9 +209,9 @@ Matrix* create_matrix(int m, int n)         // Creates a matrix with given dimen
 
         if (mat->m[i] == NULL)
         {
-            printf("\n\n** Memory allocation error! **\n\a");
+            error_message_la(5, ERRMSS01);
 
-            exit(1100 * (i + 1));               // Identifies the point where the problem ocurred.
+            exit(5);
         }
     }
 
@@ -218,7 +226,7 @@ Matrix* create_identity_matrix(int ord)     // Creates an identity matrix of a g
 
     if (ord <= 0)
     {
-        printf("\n\n** Error: invalid order value informed for a matrix! **\n\a");
+        error_message_la(6, "invalid order value informed for a matrix!");
 
         return NULL;
     }
@@ -274,13 +282,13 @@ void insert_in_matrix(double a, Matrix *mat, int i, int j)      // Inserts a val
 {
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed! **\n\a");
+        error_message_la(7, ERRMSS04);
 
         return;
     }
     else if (i < 0 || i >= mat->row || j < 0 || j >= mat->col)
     {
-        printf("\n\n** Error: inexistent position in the matrix! **\n\a");
+        error_message_la(7, "inexistent position in the matrix!");
 
         return;
     }
@@ -292,13 +300,13 @@ double get_from_matrix(Matrix *mat, int i, int j)           // Gets a value in a
 {
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed! **\n\a");
+        error_message_la(8, ERRMSS04);
 
         return 0;
     }
     else if (i < 0 || i >= mat->row || j < 0 || j >= mat->col)
     {
-        printf("\n\n** Error: inexistent position in the matrix! **\n\a");
+        error_message_la(8, "inexistent position in the matrix!");
 
         return 0;
     }
@@ -318,9 +326,9 @@ Matrix* get_matrix(char *name)      // Get a matrix from a 'txt' file.
 
     if (filin == NULL)
     {
-        printf("\n\n** Error opening file! **\n\a");
+        error_message_la(9, ERRMSS03);
 
-        exit(6);
+        exit(9);
     }
 
     fscanf(filin, "%dx%d", &m, &n);
@@ -360,6 +368,18 @@ void print_matrix(Matrix *mat)      // Shows a matrix on the screen.
     }
 }
 
+static void error_message_la(int nmbr, char *mssg)  // Shows an error message indicating the function from where it came.
+{
+    if (mssg == NULL)
+    {
+        error_message_la(0, "NULL string informed!");
+
+        return;
+    }
+
+    printf("\n\n** Error **\n** [LA%04d]: %s **\n\a", nmbr, mssg);
+}
+
 // Copy functions:
 
 Array* copy_array(Array *arr)       // Copies an array as a new one.
@@ -369,7 +389,7 @@ Array* copy_array(Array *arr)       // Copies an array as a new one.
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to copy! **\n\a");
+        error_message_la(10, ERRMSS02);
 
         return NULL;
     }
@@ -388,17 +408,17 @@ void over_copy_array(Array *cpy, Array *pst)        // Copies an array in a pre-
 
     if (cpy == NULL || pst == NULL)
     {
-        printf("\n\n** Error: NULL array informed to copy! **\n\a");
+        error_message_la(11, ERRMSS02);
 
         return;
     }
     else if (cpy->len != pst->len)
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(11, ERRMSS05);
 
         printf("\nThe destination array must have the same number of elements of the original one.\n");
 
-        exit(7);
+        exit(11);
     }
 
     for (i = 0; i < cpy->len; i++)
@@ -412,7 +432,7 @@ Matrix* copy_matrix(Matrix *mat)        // Copies a matrix as a new one.
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to copy! **\n\a");
+        error_message_la(12, ERRMSS04);
 
         return NULL;
     }
@@ -434,17 +454,17 @@ void over_copy_matrix(Matrix *cpy, Matrix *pst)     // Copies a matrix in a pre-
 
     if (cpy == NULL || pst == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to copy! **\n\a");
+        error_message_la(13, ERRMSS04);
 
         return;
     }
     else if (cpy->row != pst->row || cpy->col != pst->col)
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(13, ERRMSS05);
 
         printf("\nThe destination matrix must have the same number of rows and columns of the original one.\n");
 
-        exit(8);
+        exit(13);
     }
 
     for (i = 0; i < cpy->row; i++)
@@ -464,14 +484,14 @@ Array* sum_array(Array *a, Array *b)            // Sums two arrays and saves the
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL array informed to sum! **\n\a");
+        error_message_la(14, ERRMSS02);
 
         return NULL;
     }
 
     if (a->len != b->len)                           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array sum! **\n\a");
+        error_message_la(14, "incompatible dimensions for an array sum!");
 
         return NULL;
     }
@@ -492,14 +512,14 @@ Array* subtract_array(Array *a, Array *b)       // Subtracts two arrays and save
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL array informed to subtraction! **\n\a");
+        error_message_la(15, ERRMSS02);
 
         return NULL;
     }
 
     if (a->len != b->len)                           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array subtraction! **\n\a");
+        error_message_la(15, "incompatible dimensions for an array subtraction!");
 
         return NULL;
     }
@@ -512,7 +532,7 @@ Array* subtract_array(Array *a, Array *b)       // Subtracts two arrays and save
     return ar;
 }
 
-Array* rnumber_times_array(double num, Array *arr)      // Multiplies a real number by an array and saves the result as a new array.
+Array* rnumber_times_array(double num, Array *arr)  // Multiplies a real number by an array and saves the result as a new array.
 {
     register int i;
 
@@ -520,7 +540,7 @@ Array* rnumber_times_array(double num, Array *arr)      // Multiplies a real num
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplication! **\n\a");
+        error_message_la(16, ERRMSS02);
 
         return NULL;
     }
@@ -541,20 +561,20 @@ Array* array_times_matrix(Array *arr, Matrix *mat)      // Multiplies an array b
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplicate! **\n\a");
+        error_message_la(17, ERRMSS02);
 
         return NULL;
     }
     else if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(17, ERRMSS04);
 
         return NULL;
     }
 
     if (arr->len != mat->row)                               // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array-matrix multiplication! **\n\a");
+        error_message_la(17, "incompatible dimensions for an array-matrix multiplication!");
 
         return NULL;
     }
@@ -580,20 +600,20 @@ Array* matrix_times_array(Matrix *mat, Array *arr)      // Multiplies a matrix b
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplicate! **\n\a");
+        error_message_la(18, ERRMSS02);
 
         return NULL;
     }
     else if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(18, ERRMSS04);
 
         return NULL;
     }
 
     if (mat->col != arr->len)                               // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix-array multiplication! **\n\a");
+        error_message_la(18, "incompatible dimensions for a matrix-array multiplication!");
 
         return NULL;
     }
@@ -617,14 +637,14 @@ void over_sum_array(Array *a, Array *b)     // Sums two arrays and overwrites th
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL array informed to sum! **\n\a");
+        error_message_la(19, ERRMSS02);
 
         return;
     }
 
     if (a->len != b->len)                       // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array sum! **\n\a");
+        error_message_la(19, "incompatible dimensions for an array sum!");
 
         return;
     }
@@ -639,14 +659,14 @@ void over_subtract_array(Array *a, Array *b)        // Subtracts two arrays and 
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL array informed to subtract! **\n\a");
+        error_message_la(20, ERRMSS02);
 
         return NULL;
     }
 
     if (a->len != b->len)                               // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array subtraction! **\n\a");
+        error_message_la(20, "incompatible dimensions for an array subtraction!");
 
         return;
     }
@@ -661,7 +681,7 @@ void over_rnumber_times_array(double num, Array *arr)       // Multiplies a real
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplication! **\n\a");
+        error_message_la(21, ERRMSS02);
 
         return;
     }
@@ -678,26 +698,26 @@ void over_array_times_matrix(Array *arr, Matrix *mat)       // Multiplies an arr
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplicate! **\n\a");
+        error_message_la(22, ERRMSS02);
 
         return;
     }
     else if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(22, ERRMSS04);
 
         return;
     }
 
     if (arr->len != mat->row)                   // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for an array-matrix multiplication! **\n\a");
+        error_message_la(22, "incompatible dimensions for an array-matrix multiplication!");
 
         return;
     }
     else if (mat->row != mat->col)                  // Only works if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(22, ERRMSS05);
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
@@ -727,26 +747,26 @@ void over_matrix_times_array(Matrix *mat, Array *arr)   // Multiplies a matrix b
 
     if (arr == NULL)
     {
-        printf("\n\n** Error: NULL array informed to multiplicate! **\n\a");
+        error_message_la(23, ERRMSS02);
 
         return;
     }
     else if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(23, ERRMSS04);
 
         return;
     }
 
     if (mat->col != arr->len)                   // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix-array multiplication! **\n\a");
+        error_message_la(23, "incompatible dimensions for a matrix-array multiplication!");
 
         return;
     }
     else if (mat->row != mat->col)                  // Only works if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(23, ERRMSS05);
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
@@ -776,14 +796,14 @@ Matrix* sum_matrix(Matrix *a, Matrix *b)            // Sums two matrixes and sav
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to sum! **\n\a");
+        error_message_la(24, ERRMSS04);
 
         return NULL;
     }
 
     if (a->row != b->row || a->col != b->col)           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix sum! **\n\a");
+        error_message_la(24, "incompatible dimensions for a matrix sum!");
 
         return NULL;
     }
@@ -807,14 +827,14 @@ Matrix* subtract_matrix(Matrix *a, Matrix *b)       // Subtracts two matrixes an
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to subtraction! **\n\a");
+        error_message_la(25, ERRMSS04);
 
         return NULL;
     }
 
     if (a->row != b->row || a->col != b->col)           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix subtraction! **\n\a");
+        error_message_la(25, "incompatible dimensions for a matrix subtraction!");
 
         return NULL;
     }
@@ -838,7 +858,7 @@ Matrix* rnumber_times_matrix(double num, Matrix *mat)       // Multiplies a real
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplication! **\n\a");
+        error_message_la(26, ERRMSS04);
 
         return NULL;
     }
@@ -862,14 +882,14 @@ Matrix* matrix_times_matrix(Matrix *a, Matrix *b)   // Multiplies two matrixes a
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(27, ERRMSS04);
 
         return NULL;
     }
 
     if (a->col != b->row)                               // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix multiplication! **\n\a");
+        error_message_la(27, "incompatible dimensions for a matrix multiplication!");
 
         return NULL;
     }
@@ -898,7 +918,7 @@ Matrix* transpose_matrix(Matrix *mat)               // Transposes a matrix and s
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to transpose! **\n\a");
+        error_message_la(28, ERRMSS04);
 
         return NULL;
     }
@@ -920,14 +940,14 @@ void over_sum_matrix(Matrix *a, Matrix *b)          // Sums two matrixes and ove
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to sum! **\n\a");
+        error_message_la(29, ERRMSS04);
 
         return;
     }
 
     if (a->row != b->row || a->col != b->col)           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix sum! **\n\a");
+        error_message_la(29, "incompatible dimensions for a matrix sum!");
 
         return;
     }
@@ -945,14 +965,14 @@ void over_subtract_matrix(Matrix *a, Matrix *b)     // Subtracts two matrixes an
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to subtraction! **\n\a");
+        error_message_la(30, ERRMSS04);
 
         return;
     }
 
     if (a->row != b->row || a->col != b->col)           // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix subtraction! **\n\a");
+        error_message_la(30, "incompatible dimensions for a matrix subtraction!");
 
         return;
     }
@@ -970,7 +990,7 @@ void over_rnumber_times_matrix(double num, Matrix *mat)     // Multiplies a real
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplication! **\n\a");
+        error_message_la(31, ERRMSS04);
 
         return;
     }
@@ -990,20 +1010,20 @@ void over_matrix_times_matrix(Matrix *a, Matrix *b)     // Multiplies two matrix
 
     if (a == NULL || b == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to multiplicate! **\n\a");
+        error_message_la(32, ERRMSS04);
 
         return;
     }
 
     if (a->col != b->row)                   // Tests the compatibility of dimensions.
     {
-        printf("\n\n** Error: incompatible dimensions for a matrix multiplication! **\n\a");
+        error_message_la(32, "incompatible dimensions for a matrix multiplication!");
 
         return;
     }
     else if (b->row != b->col)                  // Only works if the second matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(32, ERRMSS05);
 
         printf("\nThe second matrix must have the same number of rows and columns.\n");
 
@@ -1036,14 +1056,14 @@ void over_transpose_matrix(Matrix *mat)         // Transposes a matrix and overw
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to transpose! **\n\a");
+        error_message_la(33, ERRMSS04);
 
         return;
     }
 
     if (mat->row != mat->col)                       // Only works if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions for overwriting! **\n\a");
+        error_message_la(33, ERRMSS05);
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
@@ -1065,6 +1085,109 @@ void over_transpose_matrix(Matrix *mat)         // Transposes a matrix and overw
 
 // Other operations:
 
+double scalar_product(Array *a, Array *b)   // Calculates the scalar product of two vectors (arrays).
+{
+    register int i;
+
+    double spro = 0;
+
+    if (a == NULL || b == NULL)
+    {
+        error_message_la(34, ERRMSS02);
+
+        return 0;
+    }
+    else if (a->len != b->len)                  // Tests the compatibility of dimensions.
+    {
+        error_message_la(34, "incompatible dimensions for scalar product!");
+
+        return 0;
+    }
+
+    for (i = 0; i < a->len; i++)                // Scalar product
+        spro += a->a[i] * b->a[i];
+
+    return spro;
+}
+
+Array* vector_product(Array *a, Array *b)   // Calculates the vector product of two vectors (arrays).
+{
+    Array *prod;
+
+    if (a == NULL || b == NULL)
+    {
+        error_message_la(46, ERRMSS02);
+
+        return NULL;
+    }
+    if (a->len != 3 || b->len != 3)             // Vector product is defined only for three-dimensional vectors.
+    {
+        error_message_la(46, "incompatible dimensions for vector product!");
+
+        return NULL;
+    }
+
+    prod = create_array(3);
+
+    prod->a[0] = a->a[1] * b->a[2] - a->a[2] * b->a[1];
+
+    prod->a[1] = a->a[2] * b->a[0] - a->a[0] * b->a[2];
+
+    prod->a[2] = a->a[0] * b->a[1] - a->a[1] * b->a[0];
+
+    return prod;
+}
+
+double euclidean_norm(Array *arr)       // Calculates the euclidean norm of a vector (array).
+{
+    register int i;
+
+    double norm = 0;
+
+    if (arr == NULL)
+    {
+        error_message_la(35, ERRMSS02);
+
+        return 0;
+    }
+
+    for (i = 0; i < arr->len; i++)          // Euclidean norm
+        norm += arr->a[i] * arr->a[i];
+
+    norm = sqrt(norm);
+
+    return norm;
+}
+
+double cosine_similarity(Array *a, Array *b)    // Determines the cosine of the angle between two vectors (arrays).
+{
+    double anrm, bnrm, co;
+
+    if (a == NULL || b == NULL)
+    {
+        error_message_la(36, ERRMSS02);
+
+        return 100000;
+    }
+
+    anrm = euclidean_norm(a);       // Calculates the euclidean norm of the two vectors.
+
+    bnrm = euclidean_norm(b);
+
+    if (anrm == 0 || bnrm == 0)
+    {
+        error_message_la(36, "vector with zero length informed!");
+
+        printf("\nThere is no cosine value available.\n");
+
+        return 100000;
+    }
+    else
+        co = scalar_product(a, b) / (anrm * bnrm);      // Cosine similarity
+
+    return co;
+}
+
 void swap_rows(Matrix *mat, int a, int b)           // Swaps two rows of a matrix.
 {
     register int j;
@@ -1072,15 +1195,15 @@ void swap_rows(Matrix *mat, int a, int b)           // Swaps two rows of a matri
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to swap rows! **\n\a");
+        error_message_la(37, ERRMSS04);
 
-        exit(9);
+        exit(37);
     }
     else if (a >= mat->row || a < 0 || b >= mat->row || b < 0)  // Tests if the rows exist.
     {
-        printf("\n\n** Error: invalid row number! **\n\a");
+        error_message_la(37, "invalid row number!");
 
-        exit(10);
+        exit(37);
     }
 
     for (j = 0; j < mat->col; j++)                              // Swaps the rows.
@@ -1101,7 +1224,7 @@ int gaussian_elimination(Matrix *mat)   // Transforms a square matrix into an up
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to make triangular! **\n\a");
+        error_message_la(38, ERRMSS04);
 
         return NULL;
     }
@@ -1152,17 +1275,17 @@ double determinant(Matrix *mat)         // Calculates the determinant of a squar
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to calculate the determinant! **\n\a");
+        error_message_la(39, ERRMSS04);
 
-        exit(11);
+        exit(39);
     }
     else if (mat->row != mat->col)          // Tests if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions to calculate a determinant! **\n\a");
+        error_message_la(39, "incompatible dimensions to calculate a determinant!");
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
-        exit(12);
+        exit(39);
     }
 
     tempmat = copy_matrix(mat);
@@ -1192,17 +1315,17 @@ double over_determinant(Matrix *mat)    // Calculates the determinant of a squar
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to calculate the determinant! **\n\a");
+        error_message_la(40, ERRMSS04);
 
-        exit(13);
+        exit(40);
     }
     else if (mat->row != mat->col)          // Tests if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions to calculate a determinant! **\n\a");
+        error_message_la(40, "incompatible dimensions to calculate a determinant!");
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
-        exit(14);
+        exit(40);
     }
 
     corr = gaussian_elimination(mat);       // Transforms the matrix into an upper triangular one.
@@ -1229,13 +1352,13 @@ Matrix* inverse_matrix(Matrix *mat)             // Returns the inverse of a matr
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to invert! **\n\a");
+        error_message_la(41, ERRMSS04);
 
         return NULL;
     }
     else if (mat->row != mat->col)                  // Tests if the matrix is square.
     {
-        printf("\n\n** Error: incompatible dimensions to do an inversion! **\n\a");
+        error_message_la(41, "incompatible dimensions to do an inversion!");
 
         printf("\nThe matrix must have the same number of rows and columns.\n");
 
@@ -1321,7 +1444,7 @@ double polynomial_function(double x, Array *coef)   // Evaluates a polynomial fo
 
     if (coef == NULL)
     {
-        printf("\n\n** Error: NULL array informed for the function! **\n\a");
+        error_message_la(42, ERRMSS02);
 
         return 0;
     }
@@ -1354,16 +1477,16 @@ Matrix* get_system(char *name)          // Get an augmented matrix of a system o
 
     if (filin == NULL)
     {
-        printf("\n\n** Error opening file! **\n\a");
+        error_message_la(43, ERRMSS03);
 
-        exit(15);
+        exit(43);
     }
 
     fscanf(filin, "%dx%d", &m, &n);
 
     if (n != m + 1)                         // Tests the system dimensions.
     {
-        printf("\n\n** Error: invalid system dimensions! **\n\a");
+        error_message_la(43, "invalid system dimensions!");
 
         printf("\nThe number of equations and variables must be the same.\n");
 
@@ -1389,9 +1512,9 @@ int independent_system(Matrix *mat)         // Tests if the system is independen
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to test a system of equations! **\n\a");
+        error_message_la(44, ERRMSS04);
 
-        exit(16);
+        exit(44);
     }
 
     for (i = 0; i < mat->row; i++)              // Walks through the main diagonal of the superior triangular matrix of coeficients.
@@ -1412,13 +1535,13 @@ Array* solve_system(Matrix *mat)                    // Solves a system of 'n' eq
 
     if (mat == NULL)
     {
-        printf("\n\n** Error: NULL matrix informed to solve a system of equations! **\n\a");
+        error_message_la(45, ERRMSS04);
 
         return NULL;
     }
     else if (mat->col != mat->row + 1 || mat->row < 1)  // Tests the coherence of the numbers of equations and variables.
     {
-        printf("\n\n** Error: incompatible dimensions to solve the system of equations! **\n\a");
+        error_message_la(45, "incompatible dimensions to solve the system of equations!");
 
         return NULL;
     }
