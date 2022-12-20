@@ -7,7 +7,7 @@
 #include <math.h>
 #include "linalg.h"
 
-#define ERRMSS01 "memory allocation error!"
+#define ERRMSS01 "memory allocation error!"                     // Common error messages
 #define ERRMSS02 "NULL array informed!"
 #define ERRMSS03 "error opening file!"
 #define ERRMSS04 "NULL matrix informed!"
@@ -1231,7 +1231,7 @@ int gaussian_elimination(Matrix *mat)   // Transforms a square matrix into an up
 
     for (i = 0; i < mat->row; i++)
     {
-        if (mat->m[i][i] == 0 && i < mat->row - 1)  // Swaps lines, if necessary, to better organize the matrix.
+        if (mat->m[i][i] == 0 && i < mat->row - 1)  // Swaps rows, if necessary, to better organize the matrix.
         {
             for (k = i + 1; k < mat->row; k++)
             {
@@ -1517,7 +1517,7 @@ int independent_system(Matrix *mat)         // Tests if the system is independen
         exit(44);
     }
 
-    for (i = 0; i < mat->row; i++)              // Walks through the main diagonal of the superior triangular matrix of coeficients.
+    for (i = 0; i < mat->row; i++)              // Walks through the main diagonal of the superior triangular matrix of coefficients.
     {
         if (mat->m[i][i] == 0)
             return 0;                               // Returns '0' if the product of the elements is null.
@@ -1528,7 +1528,7 @@ int independent_system(Matrix *mat)         // Tests if the system is independen
 
 Array* solve_system(Matrix *mat)                    // Solves a system of 'n' equations and 'n' variables.
 {
-    register int i, j, k;
+    register int i, j;
 
     Array *sol;
     Matrix *tempmat;
